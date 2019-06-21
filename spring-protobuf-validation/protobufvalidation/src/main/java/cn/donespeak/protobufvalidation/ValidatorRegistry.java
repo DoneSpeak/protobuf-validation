@@ -19,8 +19,8 @@ package cn.donespeak.protobufvalidation;
 import com.google.common.collect.Maps;
 import com.google.protobuf.Descriptors;
 
-import cn.donespeak.exchange.Validation;
 import cn.donespeak.protobufvalidation.constraintvalidators.*;
+import valid.ProtoValidation;
 
 import java.util.Map;
 
@@ -31,8 +31,8 @@ public class ValidatorRegistry {
     private static final Map<Descriptors.FieldDescriptor, Validator> REGISTRY = Maps.newHashMap();
 
     static {
-        REGISTRY.put(Validation.max.getDescriptor(), new MaxValidator());
-        REGISTRY.put(Validation.min.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.max.getDescriptor(), new MaxValidator());
+        REGISTRY.put(ProtoValidation.min.getDescriptor(), new MinValidator());
     }
 
 
