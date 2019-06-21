@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cn.donespeak</groupId>
+	<artifactId>protobufvalidation</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>protobufvalidation</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<protobuf.version>3.7.1</protobuf.version>
+		<java-compiler.version>1.8</java-compiler.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protobuf.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>28.0-jre</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<!-- http://commons.apache.org/proper/commons-lang/ -->
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-lang3</artifactId> 
+			<version>3.9</version> </dependency> -->
+
+	</dependencies>
+
+	<build>
+		<extensions>
+			<extension>
+				<!-- https://mvnrepository.com/artifact/kr.motd.maven/os-maven-plugin -->
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.6.2</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<!-- <plugin>
+			  <groupId>kr.motd.maven</groupId>
+			  <artifactId>os-maven-plugin</artifactId>
+			  <version>1.6.2</version>
+			  <executions>
+			    <execution>
+			      <phase>initialize</phase>
+			      <goals>
+			        <goal>detect</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			</plugin> -->
+			<plugin>
+				<!-- https://www.xolstice.org/protobuf-maven-plugin/index.html -->
+				<!-- https://mvnrepository.com/artifact/org.xolstice.maven.plugins/protobuf-maven-plugin -->
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.6.1</version>
+				<extensions>true</extensions>
+				<configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+					<!-- https://www.xolstice.org/protobuf-maven-plugin/compile-mojo.html -->
+					<!-- 默认为: src/main/proto/xxx.proto -->
+					<!-- <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot> -->
+					<!-- 默认为: ${project.build.directory}/generated-sources/protobuf/java，会自动添加为source，因为使用默认即可 -->
+					<!-- <outputDirectory>${project.basedir}/src/main/java</outputDirectory> -->
+					<!-- 当 clearOutputDirectory = true 时，每次执行都会清楚 outputDirectory 指定的目录下的所有文件 -->
+					<!-- <clearOutputDirectory>false</clearOutputDirectory> -->
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<source>${java-compiler.version}</source>
+						<target>${java-compiler.version}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+
+		</pluginManagement>
+	</build>
+</project>
