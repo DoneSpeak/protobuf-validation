@@ -1,5 +1,7 @@
 package cn.donespeak.protobufvalidation;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,8 +30,12 @@ public class ValidationInterceptorTest {
 	@Test
 	public void testValidate() {
 		UserProto.UserRequest user = UserProto.UserRequest.newBuilder()
-				.setAge(1000)
-				.setName("nane")
+				.setName("naneLL")
+				.setAge(25)
+				.setEmail("dfdfdfdf@gr.email.com")
+				.setScore(22)
+				.addAllRoles(Arrays.asList(1, 3))
+				.setBalance(0)
 				.build();
 		
 		validator.validate(user);

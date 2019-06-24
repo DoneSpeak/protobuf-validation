@@ -10,6 +10,8 @@ import valid.RangeConstraint;
  * representation of the numeric fieldValue.
  * 
  * {@see org.hibernate.validator.constraints.Range}
+ * 
+ * @author Guanrong Yang
  */
 public class RangeValidator extends AbstractValidator {
 

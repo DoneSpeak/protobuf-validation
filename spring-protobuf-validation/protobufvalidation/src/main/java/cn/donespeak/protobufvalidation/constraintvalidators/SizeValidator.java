@@ -1,10 +1,7 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Map;
-
 import cn.donespeak.protobufvalidation.AbstractValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.util.CollectionUtil;
 import valid.SizeContraint;
 
 public class SizeValidator extends AbstractValidator {
@@ -19,22 +16,14 @@ public class SizeValidator extends AbstractValidator {
 		if(fieldValue == null) {
 			return;
 		}
-		int size = 0;
-		if (fieldValue instanceof CharSequence) {
-			size = ((CharSequence) fieldValue).length();
-		} else if (fieldValue instanceof Collection) {
-	        size = ((Collection<?>) fieldValue).size();
-		} else if(fieldValue instanceof Map) {
-			size = ((Map<?, ?>) fieldValue).size();
-		} else if (fieldValue.getClass().isArray()) {
-			size = Array.getLength(fieldValue);
+		Integer size = CollectionUtil.getSize(fieldValue);
+		if(size == null) {
+			return;
 		}
-		
-		checkArgument(size, extensionValue);
+		checkArgument(size, (SizeContraint) extensionValue);
 	}
 
-	private void checkArgument(int size, Object extensionValue) {
-		SizeContraint constraint = (SizeContraint) extensionValue;
+	private void checkArgument(int size, SizeContraint constraint) {
 		if(constraint.hasMin() && constraint.hasMax()) {
 			boolean expression = constraint.getMin() <= size && size <= constraint.getMax();
 			checkArgument(expression, message, constraint.getMin(), constraint.getMax());

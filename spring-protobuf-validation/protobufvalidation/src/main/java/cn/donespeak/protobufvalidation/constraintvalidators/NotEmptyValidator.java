@@ -7,10 +7,17 @@ import java.util.Map;
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
 /**
- * 不可以为 null 或者 empty
- * 作用于 集合类。
- * @author yangguanrong
- *
+ * The annotated element must not be {@code null} nor empty. Supported types are:
+ * <ul>
+ * <li>{@code CharSequence} (length of character sequence is evaluated)</li>
+ * <li>{@code Collection} (collection size is evaluated)</li>
+ * <li>{@code Map} (map size is evaluated)</li>
+ * <li>Array (array length is evaluated)</li>
+ * </ul>
+ * 
+ * {@see javax.validation.constraints.NotEmpty}
+ * 
+ * @author guanrong.yang
  */
 public class NotEmptyValidator extends AbstractValidator {
 

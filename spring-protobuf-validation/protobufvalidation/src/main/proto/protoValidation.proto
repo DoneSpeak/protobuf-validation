@@ -21,8 +21,10 @@ extend google.protobuf.FieldOptions {
     // 检查数值 整数位和小数位 是否小于指定值
     optional DigitsConstraint digits = 5106;
     // 检查时间是否是当前时间之前，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+    // 当值为ture时，表示过去（不包含现在），false表示现在或者未来
     optional bool past = 5107;
     // 检查时间是否是当前时间之后，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+    // 当值为ture时，表示未来（不包含现在），false表示现在或者过去
     optional bool future = 5108;
     // 校验字符串是否符合正则表达式
     optional string pattern = 5109;
@@ -34,22 +36,11 @@ extend google.protobuf.FieldOptions {
     optional bool positive = 5112;
     // 为true时，表示必须为负数，false时，则为非负数
     optional bool negative = 5113;
-
     optional RangeConstraint range = 5114;
     //
     optional LengthConstraint length = 5115;
     // 必须是电子邮箱地址
     optional bool email = 5116;
-
-	// 数值为选项中的一个
-    repeated int64 in = 5117;
-    // 数值不为选项中的任意一个
-    repeated int64 notIn = 5118;
-
-    // 字符串为选项中的一个
-    repeated string among = 5119;
-	// 字符串不为选项中的任意一个
-    repeated string not_among = 5120;
 }
 
 message DigitsConstraint {

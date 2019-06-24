@@ -17,6 +17,8 @@ import cn.donespeak.protobufvalidation.constraintvalidators.util.NumberUtil;
  * <p>
  * {@code null} elements are considered valid.
  * {@see javax.validation.constraints.Negative}
+ * 
+ * @author Guanrong Yang
  */
 public class NegativeValidator extends AbstractValidator {
 

@@ -1,8 +1,5 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import cn.donespeak.protobufvalidation.AbstractValidator;
 import cn.donespeak.protobufvalidation.constraintvalidators.util.NumberUtil;
 /**
@@ -21,8 +18,7 @@ import cn.donespeak.protobufvalidation.constraintvalidators.util.NumberUtil;
  *
  * {@see javax.validation.constraints.Positive}
  *
- * @author Gunnar Morling
- * @since 2.0
+ * @author guanrong yang
  */
 public class PositiveValidator extends AbstractValidator {
 

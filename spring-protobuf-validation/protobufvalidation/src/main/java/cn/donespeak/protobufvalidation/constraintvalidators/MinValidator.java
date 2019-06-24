@@ -34,6 +34,7 @@ public class MinValidator extends AbstractValidator {
     	if(fieldValue == null || !(fieldValue instanceof Number)) {
     		return;
     	}
+    	System.out.println("#### MinValidator.extensionValue: " + extensionValue);
         BigDecimal min = new BigDecimal(extensionValue.toString());
         BigDecimal value = new BigDecimal(fieldValue.toString());
         

@@ -2,6 +2,12 @@ package cn.donespeak.protobufvalidation.constraintvalidators;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
+/**
+ * {@see javax.validation.constraints.Future}
+ * 
+ * @author Guanrong Yang
+ *
+ */
 public class FutureValidator extends AbstractValidator {
 
 	@Override

@@ -5,7 +5,10 @@ package cn.donespeak.exchange;
 import "protoValidation.proto";
 
 message UserRequest {
-	string name = 1;
+	string name = 1 [(valid.pattern) = "[a-zA-Z]{5,20}"];
 	int32 age = 2 [(valid.max) = 100, (valid.min) = 18];
-	string email = 3 [(valid.email) = true];
+	string email = 3 [(valid.not_null) = true, (valid.email) = true];
+	int32 score = 4 [(valid.range) = {min: 0, max: 100}];
+	repeated int32 roles = 5 [(valid.not_empty) = true];
+	int32 balance = 6 [(valid.negative) = false];
 }

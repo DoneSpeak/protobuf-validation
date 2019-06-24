@@ -6,6 +6,8 @@ import valid.LengthConstraint;
  * Validate that the string is between min and max included.
  * 
  * {@see org.hibernate.validator.constraints.Length}
+ * 
+ * @author Guanrong Yang
  */
 public class LengthValidator extends AbstractValidator {
 
