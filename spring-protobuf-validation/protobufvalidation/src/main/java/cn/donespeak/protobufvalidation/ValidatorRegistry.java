@@ -31,10 +31,27 @@ public class ValidatorRegistry {
     private static final Map<Descriptors.FieldDescriptor, Validator> REGISTRY = Maps.newHashMap();
 
     static {
-        REGISTRY.put(ProtoValidation.max.getDescriptor(), new MaxValidator());
+        REGISTRY.put(ProtoValidation.notNull.getDescriptor(), new MaxValidator());
+        REGISTRY.put(ProtoValidation.assertBool.getDescriptor(), new MinValidator());
         REGISTRY.put(ProtoValidation.min.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.max.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.size.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.digits.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.past.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.future.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.pattern.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.notBlank.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.notEmpty.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.positive.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.negative.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.range.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.length.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.email.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.in.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.notIn.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.among.getDescriptor(), new MinValidator());
+        REGISTRY.put(ProtoValidation.notAmong.getDescriptor(), new MinValidator());
     }
-
 
     public static Validator getValidator(Descriptors.FieldDescriptor descriptor) {
         return REGISTRY.get(descriptor);

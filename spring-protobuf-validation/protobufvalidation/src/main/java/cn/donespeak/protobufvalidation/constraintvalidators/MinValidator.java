@@ -16,6 +16,8 @@
 
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
+import java.math.BigDecimal;
+
 import com.google.common.base.Preconditions;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
@@ -29,20 +31,14 @@ public class MinValidator extends AbstractValidator {
 	
     @Override
     protected void doValidate(Object fieldValue, Object extensionValue, String errInfo) {
-        String extensionValueStr = extensionValue.toString();
-        String fieldValueStr = fieldValue.toString();
-        String err = errInfo + "error with Min";
-        if (fieldValue instanceof Long) {
-            Preconditions.checkArgument(Long.valueOf(extensionValueStr) < Long.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Integer) {
-            Preconditions.checkArgument(Integer.valueOf(extensionValueStr) < Integer.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Float) {
-            Preconditions.checkArgument(Float.valueOf(extensionValueStr) < Float.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Double) {
-            Preconditions.checkArgument(Double.valueOf(extensionValueStr) < Double.valueOf(fieldValueStr), err);
+    	if(fieldValue == null || !(fieldValue instanceof Number)) {
+    		return;
+    	}
+        BigDecimal min = new BigDecimal(extensionValue.toString());
+        BigDecimal value = new BigDecimal(fieldValue.toString());
+        
+        if(value.compareTo(min) < 0) {
+        	throw new IllegalArgumentException("MinValidator");
         }
     }
 

@@ -16,33 +16,44 @@
 
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
+import java.math.BigDecimal;
+
 import com.google.common.base.Preconditions;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
 /**
- *
- * @author Serious
- * @date 2017/6/28
+ * The annotated element must be a number whose value must be lower or
+ * equal to the specified maximum.
+ * <p>
+ * Supported types are:
+ * <ul>
+ *     <li>{@code BigDecimal}</li>
+ *     <li>{@code BigInteger}</li>
+ *     <li>{@code byte}, {@code short}, {@code int}, {@code long}, and their respective
+ *     wrappers</li>
+ * </ul>
+ * Note that {@code double} and {@code float} are not supported due to rounding errors
+ * (some providers might provide some approximative support).
+ * <p>
+ * {@code null} elements are considered valid.
+ * 
+ * {@see javax.validation.constraints.Max}
  */
+
 public class MaxValidator extends AbstractValidator {
 	
     @Override
-    protected void doValidate(Object fieldValue, Object extensionValue, String errInfo){
-        String extensionValueStr = extensionValue.toString();
-        String fieldValueStr = fieldValue.toString();
-        String err = errInfo + "error with Max";
-        if (fieldValue instanceof Long) {
-            Preconditions.checkArgument(Long.valueOf(extensionValueStr) > Long.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Integer) {
-            Preconditions.checkArgument(Integer.valueOf(extensionValueStr) > Integer.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Float) {
-            Preconditions.checkArgument(Float.valueOf(extensionValueStr) > Float.valueOf(fieldValueStr), err);
-        }
-        if (fieldValue instanceof Double) {
-            Preconditions.checkArgument(Double.valueOf(extensionValueStr) > Double.valueOf(fieldValueStr), err);
+    protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
+    		throws IllegalArgumentException {
+    	if(fieldValue == null || !(fieldValue instanceof Number)) {
+    		return;
+    	}
+        BigDecimal max = new BigDecimal(extensionValue.toString());
+        BigDecimal value = new BigDecimal(fieldValue.toString());
+        
+        if(value.compareTo(max) > 0) {
+        	throw new IllegalArgumentException("MaxValidator");
         }
     }
 

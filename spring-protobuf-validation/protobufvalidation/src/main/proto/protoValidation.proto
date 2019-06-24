@@ -7,11 +7,67 @@ import "google/protobuf/descriptor.proto";
 package valid;
 
 extend google.protobuf.FieldOptions {
-    optional int64 max = 50001;
-    optional int64 min = 50002;
-    optional bool past = 50003;
-    optional bool future = 50004;
-    optional int64 repeatMax = 50005;
-    optional int64 repeatMin = 50006;
-    optional string regex = 50007;
+    // TODO 越是常用的，数值就应该越小
+    // 为true时，不能为null，false 时必须为null
+    optional bool not_null = 5101;
+    // 检查 boolean 类型属性指定值是否匹配
+    optional bool assert_bool = 5102;
+    // 检查数值类型属性的值是否大于 min
+    optional int64 min = 5103;
+    // 检查数值类型属性的值是否小于 max
+    optional int64 max = 5104;
+    // 检查集合类大小
+    optional SizeContraint size = 5105;
+    // 检查数值 整数位和小数位 是否小于指定值
+    optional DigitsConstraint digits = 5106;
+    // 检查时间是否是当前时间之前，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+    optional bool past = 5107;
+    // 检查时间是否是当前时间之后，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+    optional bool future = 5108;
+    // 校验字符串是否符合正则表达式
+    optional string pattern = 5109;
+    // 为true时，字符串不能为空，且trim之后长度大于 0
+    optional string not_blank = 5110;
+    // 为true时，集合不能为空，且大小必须大于 0
+    optional bool not_empty = 5111;
+    // 为true时，表示必须为正数，false时，则为非正数
+    optional bool positive = 5112;
+    // 为true时，表示必须为负数，false时，则为非负数
+    optional bool negative = 5113;
+
+    optional RangeConstraint range = 5114;
+    //
+    optional LengthConstraint length = 5115;
+    // 必须是电子邮箱地址
+    optional bool email = 5116;
+
+	// 数值为选项中的一个
+    repeated int64 in = 5117;
+    // 数值不为选项中的任意一个
+    repeated int64 notIn = 5118;
+
+    // 字符串为选项中的一个
+    repeated string among = 5119;
+	// 字符串不为选项中的任意一个
+    repeated string not_among = 5120;
+}
+
+message DigitsConstraint {
+    optional int32 integer = 1;
+    optional int32 fraction = 2;
+}
+
+message SizeContraint {
+    optional int32 max = 1;
+    optional int32 min = 2;
+}
+
+message RangeConstraint {
+    optional int32 min = 1;
+    optional int32 max = 2;
+}
+
+message LengthConstraint {
+    optional int32 min = 1;
+    optional int32 max = 2;
 }
