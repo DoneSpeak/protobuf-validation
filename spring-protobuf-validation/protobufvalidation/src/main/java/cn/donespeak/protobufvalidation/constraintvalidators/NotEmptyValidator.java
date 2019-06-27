@@ -17,6 +17,8 @@ import cn.donespeak.protobufvalidation.AbstractValidator;
  * <li>Array (array length is evaluated)</li>
  * </ul>
  * 
+ * {@code null} is regarded as empty.
+ * 
  * {@see javax.validation.constraints.NotEmpty}
  * 
  * @author Guanrong Yang

@@ -8,6 +8,8 @@ import cn.donespeak.protobufvalidation.AbstractValidator;
 /**
  * The annotated element must not be {@code null} and must contain at least one
  * non-whitespace character. Accepts {@code CharSequence}.
+ *
+ * {@code null} is regarded as blank.
  * 
  * {@see javax.validation.constraints.NotBlank}
  * 
