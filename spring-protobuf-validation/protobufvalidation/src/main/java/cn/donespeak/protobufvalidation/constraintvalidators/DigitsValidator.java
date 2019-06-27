@@ -19,7 +19,10 @@ import valid.DigitsConstraint;
  * </ul>
  * <p/>
  * {@code null} elements are considered valid.
+ * 
  * {@see javax.validation.constraints.Digits}
+ * {@see org.hibernate.validator.internal.constraintvalidators.bv.DigitsValidatorForCharSequence}
+ * {@see org.hibernate.validator.internal.constraintvalidators.bv.DigitsValidatorForNumber}
  * 
  * @author Guanrong Yang
  * @date 2019/06/27
@@ -51,7 +54,17 @@ public class DigitsValidator extends AbstractValidator {
 		if(fieldValue == null) {
 			return;
 		}
-		BigDecimal bigNum = new BigDecimal(fieldValue.toString()).stripTrailingZeros();
+		BigDecimal bigNum = null;
+		if(fieldValue instanceof BigDecimal) {
+		    bigNum = (BigDecimal) fieldValue;
+		} else if (fieldValue instanceof Number) {
+		    bigNum = new BigDecimal(fieldValue.toString()).stripTrailingZeros();
+		} else if(fieldValue instanceof CharSequence){
+		    bigNum = getBigDecimalValue(fieldValue.toString());
+		} else {
+		    throw new AssertionError("The type of `fieldValue` is not supported");
+		}
+		
 		int integerPartLength = bigNum.precision() - bigNum.scale();
 		int fractionPartLength = bigNum.scale() < 0 ? 0 : bigNum.scale();
 		
@@ -65,4 +78,14 @@ public class DigitsValidator extends AbstractValidator {
 		}
 	}
 
+	private BigDecimal getBigDecimalValue(CharSequence charSequence) {
+        BigDecimal bd;
+        try {
+            bd = new BigDecimal( charSequence.toString() );
+        }
+        catch (NumberFormatException nfe) {
+            return null;
+        }
+        return bd;
+    }
 }

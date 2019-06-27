@@ -35,4 +35,10 @@ public class ValidationInterceptorTest {
 		    System.out.println(error);
 		}
 	}
+	
+	public static void main(String[] args) {
+	    ValidationInterceptorTest test = new ValidationInterceptorTest();
+	    test.before();
+	    test.testValidate();
+	}
 }
