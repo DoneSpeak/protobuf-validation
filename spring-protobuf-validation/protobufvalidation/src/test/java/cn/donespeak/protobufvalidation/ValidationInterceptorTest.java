@@ -1,43 +1,38 @@
 package cn.donespeak.protobufvalidation;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.protobuf.GeneratedMessageV3;
-
 import cn.donespeak.exchange.UserProto;
-import cn.donespeak.protobufvalidation.interceptor.AbstractValidationInterceptor;
 
 public class ValidationInterceptorTest {
 	
-	public class ValidationInterceptor extends AbstractValidationInterceptor {
-		
-		@Override
-		public void validate(GeneratedMessageV3 messageV3) {
-			super.validate(messageV3);
-		}
-	}
-
-	private ValidationInterceptor validator;
+	private ProtoValidatorImpl validator;
 		
 	@Before
 	public void before() {
-		validator = new ValidationInterceptor();
+		validator = new ProtoValidatorImpl();
 	}
 	
 	@Test
 	public void testValidate() {
 		UserProto.UserRequest user = UserProto.UserRequest.newBuilder()
-				.setName("naneLL")
-				.setAge(25)
-				.setEmail("dfdfdfdf@gr.email.com")
-				.setScore(22)
+				.setName("")
+				.setAge(205)
+				.setEmail("dfdfdfdgr.email.com")
+				.setScore(22000)
 				.addAllRoles(Arrays.asList(1, 3))
-				.setBalance(0)
+				.setBalance(-10)
 				.build();
 		
-		validator.validate(user);
+		Set<ProtoConstraintViolation> errors = validator.validate(user);
+        System.out.println("errors: " + errors.size());
+        
+		for(ProtoConstraintViolation error: errors) {
+		    System.out.println(error);
+		}
 	}
 }

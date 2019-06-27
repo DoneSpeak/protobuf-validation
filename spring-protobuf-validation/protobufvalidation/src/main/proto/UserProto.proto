@@ -11,4 +11,23 @@ message UserRequest {
 	int32 score = 4 [(valid.range) = {min: 0, max: 100}];
 	repeated int32 roles = 5 [(valid.not_empty) = true];
 	int32 balance = 6 [(valid.negative) = false];
+
+	ActiveStatusE active_statue = 7;
+
+	Address address = 8;
+}
+
+message Address {
+	string city = 1;
+	string state = 2;
+
+	Address sub_address = 3;
+}
+
+enum ActiveStatusE {
+	AS_UNRECOGNIZED = 0;
+	ACTIVED = 1;
+	DELETED = 2;
+	LOCKED = 3;
+	INACTIVE = -1;
 }

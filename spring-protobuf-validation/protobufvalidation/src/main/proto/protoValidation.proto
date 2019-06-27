@@ -7,7 +7,6 @@ import "google/protobuf/descriptor.proto";
 package valid;
 
 extend google.protobuf.FieldOptions {
-    // TODO 越是常用的，数值就应该越小
     // 为true时，不能为null，false 时必须为null
     optional bool not_null = 5101;
     // 检查 boolean 类型属性指定值是否匹配
@@ -41,24 +40,34 @@ extend google.protobuf.FieldOptions {
     optional LengthConstraint length = 5115;
     // 必须是电子邮箱地址
     optional bool email = 5116;
+	// 校验 proto 类，为true时进行级联校验，false时不进行
+    optional bool validate = 5117;
 }
 
 message DigitsConstraint {
+	// 小数点前的数的位数
     optional int32 integer = 1;
+    // 小数点后的数的位数
     optional int32 fraction = 2;
 }
 
 message SizeContraint {
-    optional int32 max = 1;
-    optional int32 min = 2;
-}
-
-message RangeConstraint {
+	// 缺省值为 0
     optional int32 min = 1;
+    // 缺省值为 Integer.MAX_VALUE
     optional int32 max = 2;
 }
 
+message RangeConstraint {
+	// 缺省值为
+    optional int64 min = 1;
+    // 缺省值为 Long.MAX_VALUE
+    optional int64 max = 2;
+}
+
 message LengthConstraint {
+	// 缺省值为 0
     optional int32 min = 1;
+    // 缺省值为 Integer.MAX_VALUE
     optional int32 max = 2;
 }

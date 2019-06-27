@@ -13,4 +13,13 @@ public class NotNullValidator extends AbstractValidator {
 			throw new IllegalArgumentException("校验不通过");
 		}
 	}
+
+    /* (non-Javadoc)
+     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
+     */
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
+    }
 }

@@ -33,4 +33,9 @@ public class LengthValidator extends AbstractValidator {
 		}
 	}
 
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        
+    }
+
 }

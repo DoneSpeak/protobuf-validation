@@ -34,7 +34,6 @@ public class MinValidator extends AbstractValidator {
     	if(fieldValue == null || !(fieldValue instanceof Number)) {
     		return;
     	}
-    	System.out.println("#### MinValidator.extensionValue: " + extensionValue);
         BigDecimal min = new BigDecimal(extensionValue.toString());
         BigDecimal value = new BigDecimal(fieldValue.toString());
         
@@ -46,5 +45,14 @@ public class MinValidator extends AbstractValidator {
     @Override
     public String toString() {
         return "MinValidator";
+    }
+
+    /* (non-Javadoc)
+     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
+     */
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
     }
 }

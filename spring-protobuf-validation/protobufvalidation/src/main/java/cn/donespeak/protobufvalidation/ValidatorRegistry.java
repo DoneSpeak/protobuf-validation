@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Serious
  */
 public class ValidatorRegistry {
-    private static final Map<Descriptors.FieldDescriptor, Validator> REGISTRY = Maps.newHashMap();
+    private static final Map<Descriptors.FieldDescriptor, ContraintValidator> REGISTRY = Maps.newHashMap();
 
     static {
         REGISTRY.put(ProtoValidation.notNull.getDescriptor(), new NotNullValidator());
@@ -49,7 +49,7 @@ public class ValidatorRegistry {
         REGISTRY.put(ProtoValidation.email.getDescriptor(), new EmailValidator());
     }
 
-    public static Validator getValidator(Descriptors.FieldDescriptor descriptor) {
+    public static ContraintValidator getValidator(Descriptors.FieldDescriptor descriptor) {
         return REGISTRY.get(descriptor);
     }
 }

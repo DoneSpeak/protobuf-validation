@@ -29,4 +29,10 @@ public class DigitsValidator extends AbstractValidator {
 			throw new IllegalArgumentException("");
 		}
 	}
+
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
+    }
 }

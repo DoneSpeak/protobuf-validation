@@ -6,5 +6,8 @@ README
 1. 标记的类型不是目标类型，
 2. null 值
 
+## null 值约定
+
+
 ## 操作说明
 项目导入之后，请执行“Maven Update”以将proto文件生成java类。

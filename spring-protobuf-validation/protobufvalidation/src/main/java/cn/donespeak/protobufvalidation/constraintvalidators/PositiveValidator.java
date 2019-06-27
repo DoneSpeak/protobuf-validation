@@ -35,4 +35,13 @@ public class PositiveValidator extends AbstractValidator {
 			throw new IllegalArgumentException("");
 		}
 	}
+
+    /* (non-Javadoc)
+     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
+     */
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
+    }
 }

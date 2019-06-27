@@ -5,15 +5,18 @@ package cn.donespeak.protobufvalidation;
  * @author Serious
  * @date 2017/6/28
  */
-public abstract class AbstractValidator implements Validator {
+public abstract class AbstractValidator implements ContraintValidator {
 
     @Override
-    public void validate(String protoName, String fieldName, Object fieldValue, Object extensionValue) throws IllegalArgumentException {
-        String errInfo = String.format("validate error protoName:%s,fieldName:%s,fieldValue:%s,extensionValue:%s,", protoName, fieldName, fieldValue, extensionValue);
-        System.out.println("fieldValue: " + fieldValue + ", extensionValue: " + extensionValue);
+    public void validate(Class<?> fieldClass, String fieldName, Object fieldValue,  
+        Object extensionValue) throws IllegalArgumentException {
+        String errInfo = String.format("validate error fieldName:%s,fieldValue:%s,extensionValue:%s,", fieldName, fieldValue, extensionValue);
+        
         doValidate(fieldValue, extensionValue, errInfo);
     }
 
+    protected abstract void supported(Object fieldValue) throws IllegalArgumentException;
+    
     protected abstract void doValidate(Object fieldValue, Object extensionValue, String errInfo) throws IllegalArgumentException;
 
 }

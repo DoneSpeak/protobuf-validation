@@ -15,4 +15,10 @@ public class EmailValidator extends AbstractValidator {
 			throw new IllegalArgumentException("EmailValidator");
 		}
 	}
+
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
+    }
 }

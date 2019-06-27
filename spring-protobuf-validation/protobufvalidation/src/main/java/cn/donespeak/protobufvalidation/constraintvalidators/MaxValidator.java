@@ -61,4 +61,13 @@ public class MaxValidator extends AbstractValidator {
     public String toString() {
         return "MaxValidator";
     }
+
+    /* (non-Javadoc)
+     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
+     */
+    @Override
+    protected void supported(Object fieldValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+         
+    }
 }
