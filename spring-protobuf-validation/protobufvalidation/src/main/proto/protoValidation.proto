@@ -28,15 +28,16 @@ extend google.protobuf.FieldOptions {
     // 校验字符串是否符合正则表达式
     optional string pattern = 5109;
     // 为true时，字符串不能为空，且trim之后长度大于 0
-    optional string not_blank = 5110;
+    optional bool not_blank = 5110;
     // 为true时，集合不能为空，且大小必须大于 0
     optional bool not_empty = 5111;
     // 为true时，表示必须为正数，false时，则为非正数
     optional bool positive = 5112;
     // 为true时，表示必须为负数，false时，则为非负数
     optional bool negative = 5113;
+    // 取值范围应该在range中
     optional RangeConstraint range = 5114;
-    //
+    // 字符串长度应该在length指定的范围内
     optional LengthConstraint length = 5115;
     // 必须是电子邮箱地址
     optional bool email = 5116;

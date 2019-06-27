@@ -20,13 +20,6 @@ public class ProtoConstraintViolation {
     public void setPropertyPath(String protertyPath) {
         this.propertyPath = protertyPath;
     }
-    public void setPropertyPath(String propertyPath, String propertyName) {
-        if(propertyPath == null || propertyPath.isEmpty()) {
-            this.propertyPath = propertyName;
-        } else {
-            this.propertyPath = propertyName + "." + propertyName;
-        }
-    }
     public String getPropertyName() {
         return propertyName;
     }

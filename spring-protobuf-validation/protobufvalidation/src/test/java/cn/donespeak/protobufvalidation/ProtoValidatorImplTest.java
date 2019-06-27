@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import cn.donespeak.exchange.UserProto;
 
-public class ValidationInterceptorTest {
+public class ProtoValidatorImplTest {
 	
 	private ProtoValidatorImpl validator;
 		
@@ -19,6 +19,7 @@ public class ValidationInterceptorTest {
 	
 	@Test
 	public void testValidate() {
+	    UserProto.House house = UserProto.House.newBuilder().setLocation("").build();
 		UserProto.UserRequest user = UserProto.UserRequest.newBuilder()
 				.setName("")
 				.setAge(205)
@@ -26,8 +27,9 @@ public class ValidationInterceptorTest {
 				.setScore(22000)
 				.addAllRoles(Arrays.asList(1, 3))
 				.setBalance(-10)
+				.setHouse(house)
 				.build();
-		
+
 		Set<ProtoConstraintViolation> errors = validator.validate(user);
         System.out.println("errors: " + errors.size());
         
@@ -37,7 +39,7 @@ public class ValidationInterceptorTest {
 	}
 	
 	public static void main(String[] args) {
-	    ValidationInterceptorTest test = new ValidationInterceptorTest();
+	    ProtoValidatorImplTest test = new ProtoValidatorImplTest();
 	    test.before();
 	    test.testValidate();
 	}

@@ -1,6 +1,7 @@
  package cn.donespeak.protobufvalidation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,30 +26,38 @@ public class ProtoValidatorImpl implements ProtoValidator {
     
     public <T extends GeneratedMessageV3> Set<ProtoConstraintViolation> validate(String propertyPath, T messageV3) {
         Set<ProtoConstraintViolation> resultValidations = new HashSet<ProtoConstraintViolation>();
-        List<GeneratedMessageV3> messageFields = new ArrayList<GeneratedMessageV3>();
+        Map<String, GeneratedMessageV3> messageFields = new HashMap<String, GeneratedMessageV3>();
         
         for (Descriptors.FieldDescriptor fieldDescriptor : messageV3.getDescriptorForType().getFields()) {
             if (fieldDescriptor.getOptions().getAllFields().size() > 0) {
+                Object fieldValue = messageV3.getField(fieldDescriptor);
                 // 对一个有 option 的字段进行校验
                 resultValidations.addAll(doValidate(propertyPath, messageV3.getField(fieldDescriptor).getClass(), 
-                    fieldDescriptor.getJsonName(), messageV3.getField(fieldDescriptor), 
+                    fieldDescriptor.getJsonName(), fieldValue, 
                     fieldDescriptor.getOptions()));
                 
-                if (messageV3.getField(fieldDescriptor) instanceof GeneratedMessageV3) {
+                if (fieldValue != null && fieldValue instanceof GeneratedMessageV3) {
                     // 如果 field 被 validate 修饰，且类型为 message 时，则需要进一步校验
+                    // 如果该 field 为 null，则不做校验
                     GeneratedMessageV3 subMessageV3 = (GeneratedMessageV3) messageV3.getField(fieldDescriptor);
-
+                    // 对 message 的 options 进行检查
                     for (Map.Entry<Descriptors.FieldDescriptor, Object> entry : fieldDescriptor.getOptions().getAllFields().entrySet()) {
                         Descriptors.FieldDescriptor optionDescriptor = entry.getKey();
+
                         if(ProtoValidation.validate.getDescriptor().equals(optionDescriptor)) {
-                            messageFields.add(subMessageV3);
+                            boolean validated = (boolean)entry.getValue();
+                            if(validated) {
+                                String newPropertyPath = appendPropertyPath(propertyPath, fieldDescriptor.getJsonName());
+                                messageFields.put(newPropertyPath, subMessageV3);
+                                break;
+                            }
                         }
                     }
                 }
             }
             // 对所有validate的message field进行校验
-            for(GeneratedMessageV3 messageField: messageFields) {
-                resultValidations.addAll(validate(messageField));
+            for(Map.Entry<String, GeneratedMessageV3> messageField: messageFields.entrySet()) {
+                resultValidations.addAll(validate(messageField.getKey(), messageField.getValue()));
             }
         }
         return resultValidations;
@@ -75,12 +84,20 @@ public class ProtoValidatorImpl implements ProtoValidator {
                 constraintViolation.setFieldDescriptor(optionDescriptor);
                 constraintViolation.setInvalidValue(fieldValue);
                 constraintViolation.setPropertyName(fieldName);
-                constraintViolation.setPropertyPath(propertyPath, fieldName);
+                constraintViolation.setPropertyPath(appendPropertyPath(propertyPath, fieldName));
                 constraintViolation.setMessage(optionDescriptor.toString());
                 
                 resultValidations.add(constraintViolation);                
             }
         }
         return resultValidations;
+    }
+    
+    private String appendPropertyPath(String propertyPath, String propertyName) {
+        if(propertyPath == null || propertyPath.isEmpty()) {
+            return propertyName;
+        } else {
+            return propertyPath + "." + propertyName;
+        }
     }
 }

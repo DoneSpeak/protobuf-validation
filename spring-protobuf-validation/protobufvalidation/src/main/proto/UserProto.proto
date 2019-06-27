@@ -14,14 +14,21 @@ message UserRequest {
 
 	ActiveStatusE active_statue = 7;
 
-	Address address = 8;
+	Address address = 8 [(valid.validate) = false];
+
+	House house = 9 [(valid.validate) = true];
 }
 
 message Address {
-	string city = 1;
-	string state = 2;
+	string city = 1 [(valid.not_blank) = true];
+	string state = 2 [(valid.not_blank) = true];
 
 	Address sub_address = 3;
+}
+
+message House {
+	string location = 1 [(valid.not_blank) = true];
+	Address address = 2 [(valid.validate) = true];
 }
 
 enum ActiveStatusE {

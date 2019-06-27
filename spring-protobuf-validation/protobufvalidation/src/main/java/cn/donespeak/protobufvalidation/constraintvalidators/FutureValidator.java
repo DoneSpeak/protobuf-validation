@@ -51,8 +51,14 @@ public class FutureValidator extends AbstractValidator {
 		} else if (fieldValue instanceof Integer) {
 			timeMillis = 1000L * (Integer) fieldValue;
 		}
-		if(timeMillis <= now) {
-			throw new IllegalArgumentException("");
-		}
+		
+		boolean extensionBoolValue = (boolean) extensionValue;
+		if((extensionBoolValue && timeMillis > now) 
+		        || (!extensionBoolValue && timeMillis <= now)) {
+		    // extensionBoolValue 为true时，表示时间必须为未来
+            // 为true时，表示时间必须为当前或者过去
+            return;
+        }
+        throw new IllegalArgumentException("");
 	}
 }
