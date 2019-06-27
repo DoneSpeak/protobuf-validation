@@ -17,23 +17,57 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
 import java.math.BigDecimal;
-
-import com.google.common.base.Preconditions;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
 /**
- *
+* The annotated element must be a number whose value must be higher or
+ * equal to the specified minimum.
+ * <p>
+ * Supported types are:
+ * <ul>
+ *     <li>{@code BigDecimal}</li>
+ *     <li>{@code BigInteger}</li>
+ *     <li>{@code byte}, {@code short}, {@code int}, {@code long}, and their respective
+ *     wrappers</li>
+ * </ul>
+ * Note that {@code double} and {@code float} are not supported due to rounding errors
+ * (some providers might provide some approximative support).
+ * <p>
+ * {@code null} elements are considered valid.
+ * 
+ * {@see javax.validation.constraints.Min}
+ * 
  * @author Serious
  * @date 2017/6/28
  */
 public class MinValidator extends AbstractValidator {
-	
+    
+    private static Set<Class<?>> SUPPORTED_CLASSES = new HashSet<Class<?>>();
+
+    static {
+        SUPPORTED_CLASSES.add(BigDecimal.class);
+        SUPPORTED_CLASSES.add(BigInteger.class);
+        // number types
+        SUPPORTED_CLASSES.add(Byte.class);
+        SUPPORTED_CLASSES.add(Short.class);
+        SUPPORTED_CLASSES.add(Integer.class);
+        SUPPORTED_CLASSES.add(Long.class);
+    }
+    
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return SUPPORTED_CLASSES.contains(fieldClass);
+    }
+    
     @Override
     protected void doValidate(Object fieldValue, Object extensionValue, String errInfo) {
-    	if(fieldValue == null || !(fieldValue instanceof Number)) {
-    		return;
-    	}
+        if(fieldValue == null) {
+            return;
+        }
         BigDecimal min = new BigDecimal(extensionValue.toString());
         BigDecimal value = new BigDecimal(fieldValue.toString());
         
@@ -45,14 +79,5 @@ public class MinValidator extends AbstractValidator {
     @Override
     public String toString() {
         return "MinValidator";
-    }
-
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
     }
 }

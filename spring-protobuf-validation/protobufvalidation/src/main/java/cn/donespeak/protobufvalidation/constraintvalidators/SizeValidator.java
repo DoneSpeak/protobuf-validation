@@ -1,15 +1,45 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import cn.donespeak.protobufvalidation.AbstractValidator;
 import cn.donespeak.protobufvalidation.constraintvalidators.util.CollectionUtil;
 import valid.SizeContraint;
 
+/**
+ * The annotated element size must be between the specified boundaries (included).
+ * <p>
+ * Supported types are:
+ * <ul>
+ *     <li>{@code CharSequence} (length of character sequence is evaluated)</li>
+ *     <li>{@code Collection} (collection size is evaluated)</li>
+ *     <li>{@code Map} (map size is evaluated)</li>
+ *     <li>Array (array length is evaluated)</li>
+ * </ul>
+ * <p>
+ * {@code null} elements are considered valid.
+ *
+ * @author Guanrong Yang
+ * @date 2019/06/27
+ */
 public class SizeValidator extends AbstractValidator {
 
-	private final String message = "The size of the collection should be between " + " and " + "";
-	private final String message1 = "The size of the collection should be greater than ";
-	private final String message2 = "The size of the collection should be lower than ";
-	
+	private static Set<Class<?>> BASE_SUPPORTED_CLASSES = new HashSet<Class<?>>();
+
+    static {
+        BASE_SUPPORTED_CLASSES.add(CharSequence.class);
+        BASE_SUPPORTED_CLASSES.add(Collection.class);
+        BASE_SUPPORTED_CLASSES.add(Map.class);
+    }
+
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return BASE_SUPPORTED_CLASSES.contains(fieldClass) || fieldClass.isArray();
+    }
+    
 	@Override
 	protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
 			throws IllegalArgumentException {
@@ -24,27 +54,13 @@ public class SizeValidator extends AbstractValidator {
 	}
 
 	private void checkArgument(int size, SizeContraint constraint) {
-		if(constraint.hasMin() && constraint.hasMax()) {
-			boolean expression = constraint.getMin() <= size && size <= constraint.getMax();
-			checkArgument(expression, message, constraint.getMin(), constraint.getMax());
-		} else if (constraint.hasMin()) {
-			checkArgument(constraint.getMin() <= size,  message1, constraint.getMin());			
-		} else if (constraint.hasMax()) {
-			checkArgument(size <= constraint.getMax(), message2, constraint.getMax());
-		}
-	}
-	
-	private void checkArgument(boolean expression, String message, Object ... args) {
-		// TODO Auto-generated method stub
-		
-	}
+	    
 
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
-    }
+        int max = constraint.hasMax()? constraint.getMax(): Integer.MAX_VALUE;
+        int min = constraint.hasMin()? constraint.getMin(): 0;
+
+        if(size > max || size < min) {
+            throw new IllegalArgumentException("The size of the collection should be between " + min + " and " + max);
+        }
+	}
 }

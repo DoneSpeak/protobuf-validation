@@ -2,7 +2,9 @@ package cn.donespeak.protobufvalidation.constraintvalidators;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
@@ -17,10 +19,23 @@ import cn.donespeak.protobufvalidation.AbstractValidator;
  * 
  * {@see javax.validation.constraints.NotEmpty}
  * 
- * @author guanrong.yang
+ * @author Guanrong Yang
+ * @date 2019/06/27
  */
 public class NotEmptyValidator extends AbstractValidator {
+    private static Set<Class<?>> BASE_SUPPORTED_CLASSES = new HashSet<Class<?>>();
 
+    static {
+        BASE_SUPPORTED_CLASSES.add(CharSequence.class);
+        BASE_SUPPORTED_CLASSES.add(Collection.class);
+        BASE_SUPPORTED_CLASSES.add(Map.class);
+    }
+
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return BASE_SUPPORTED_CLASSES.contains(fieldClass) || fieldClass.isArray();
+    }
+    
 	@Override
 	protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
 			throws IllegalArgumentException {
@@ -43,14 +58,4 @@ public class NotEmptyValidator extends AbstractValidator {
 			throw new IllegalArgumentException("NotEmptyValidator");
 		}
 	}
-
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
-    }
-
 }

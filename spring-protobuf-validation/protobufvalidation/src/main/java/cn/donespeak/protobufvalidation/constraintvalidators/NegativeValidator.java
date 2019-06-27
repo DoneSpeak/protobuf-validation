@@ -1,5 +1,10 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
+
 import cn.donespeak.protobufvalidation.AbstractValidator;
 import cn.donespeak.protobufvalidation.constraintvalidators.util.NumberUtil;
 
@@ -21,11 +26,28 @@ import cn.donespeak.protobufvalidation.constraintvalidators.util.NumberUtil;
  * @author Guanrong Yang
  */
 public class NegativeValidator extends AbstractValidator {
+    private static Set<Class<?>> SUPPORTED_CLASSES = new HashSet<Class<?>>();
 
+    static {
+        SUPPORTED_CLASSES.add(BigDecimal.class);
+        SUPPORTED_CLASSES.add(BigInteger.class);
+        // number type
+        SUPPORTED_CLASSES.add(Byte.class);
+        SUPPORTED_CLASSES.add(Short.class);
+        SUPPORTED_CLASSES.add(Integer.class);
+        SUPPORTED_CLASSES.add(Long.class);
+    }
+
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return SUPPORTED_CLASSES.contains(fieldClass);
+    }
+    
 	@Override
 	protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
 			throws IllegalArgumentException {
 		if(fieldValue == null) {
+		    // null 值通过校验
 			return;
 		}
 		
@@ -35,14 +57,4 @@ public class NegativeValidator extends AbstractValidator {
 			throw new IllegalArgumentException("");
 		}
 	}
-
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
-    }
-
 }

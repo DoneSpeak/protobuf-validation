@@ -17,8 +17,9 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
 import java.math.BigDecimal;
-
-import com.google.common.base.Preconditions;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 import cn.donespeak.protobufvalidation.AbstractValidator;
 
@@ -42,11 +43,28 @@ import cn.donespeak.protobufvalidation.AbstractValidator;
  */
 
 public class MaxValidator extends AbstractValidator {
-	
+
+    private static Set<Class<?>> SUPPORTED_CLASSES = new HashSet<Class<?>>();
+
+    static {
+        SUPPORTED_CLASSES.add(BigDecimal.class);
+        SUPPORTED_CLASSES.add(BigInteger.class);
+        // number types
+        SUPPORTED_CLASSES.add(Byte.class);
+        SUPPORTED_CLASSES.add(Short.class);
+        SUPPORTED_CLASSES.add(Integer.class);
+        SUPPORTED_CLASSES.add(Long.class);
+    }
+    
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return SUPPORTED_CLASSES.contains(fieldClass);
+    }
+    
     @Override
     protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
     		throws IllegalArgumentException {
-    	if(fieldValue == null || !(fieldValue instanceof Number)) {
+    	if(fieldValue == null) {
     		return;
     	}
         BigDecimal max = new BigDecimal(extensionValue.toString());
@@ -62,12 +80,4 @@ public class MaxValidator extends AbstractValidator {
         return "MaxValidator";
     }
 
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
-    }
 }

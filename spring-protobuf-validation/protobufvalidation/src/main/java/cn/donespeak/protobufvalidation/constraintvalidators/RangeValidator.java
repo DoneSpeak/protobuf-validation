@@ -1,8 +1,5 @@
 package cn.donespeak.protobufvalidation.constraintvalidators;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import cn.donespeak.protobufvalidation.AbstractValidator;
 import valid.RangeConstraint;
 /**
@@ -15,6 +12,14 @@ import valid.RangeConstraint;
  */
 public class RangeValidator extends AbstractValidator {
 
+    private MinValidator minValidator = new MinValidator();
+    private MaxValidator maxValidator = new MaxValidator();
+    
+    @Override
+    protected boolean supported(Class<?> fieldClass) {
+        return minValidator.supported(fieldClass) && maxValidator.supported(fieldClass);
+    }
+    
 	@Override
 	protected void doValidate(Object fieldValue, Object extensionValue, String errInfo)
 			throws IllegalArgumentException {
@@ -27,48 +32,11 @@ public class RangeValidator extends AbstractValidator {
 		long max = rangeConstraint.hasMax()? rangeConstraint.getMax(): Long.MAX_VALUE;
 		long min = rangeConstraint.hasMin()? rangeConstraint.getMin(): 0;
 		
-		boolean invalid = true;
-		if(fieldValue instanceof BigDecimal) {
-			BigDecimal fieldBigDecimalValue = (BigDecimal) fieldValue;
-			invalid = fieldBigDecimalValue.compareTo(new BigDecimal(max)) > 0
-				|| fieldBigDecimalValue.compareTo(new BigDecimal(min)) < 0;
-			
-		} else if(fieldValue instanceof BigInteger) {
-			BigInteger fieldBigIntegerValue = (BigInteger) fieldValue;
-			invalid = fieldBigIntegerValue.compareTo(BigInteger.valueOf(max)) > 0
-				|| fieldBigIntegerValue.compareTo(BigInteger.valueOf(min)) < 0;	
-			
-		} else if(fieldValue instanceof Byte) {
-			byte fieldByteValue = (Byte) fieldValue;
-			invalid = fieldByteValue > max || fieldByteValue < min;
-			
-		} else if(fieldValue instanceof Short) {
-			short shortValue = (Short) fieldValue;
-			invalid = shortValue > max || shortValue < min;
-			
-		} else if(fieldValue instanceof Integer) {
-			int intValue = (Integer) fieldValue;
-			invalid = intValue > max || intValue < min;
-			
-		} else if(fieldValue instanceof Long) {
-			long longValue = (Long) fieldValue;
-			invalid = longValue > max || longValue < min;
-			
-		} else if (fieldValue instanceof Float) {			
-			float floatValue = (Float) fieldValue;
-			invalid = floatValue > max || floatValue < min;
-		}
-		if(invalid) {
+		try {
+		    minValidator.doValidate(fieldValue, min, errInfo);
+            maxValidator.doValidate(fieldValue, max, errInfo);
+		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("RangeValidator");
 		}
 	}
-
-    /* (non-Javadoc)
-     * @see cn.donespeak.protobufvalidation.AbstractValidator#supported(java.lang.Object)
-     */
-    @Override
-    protected void supported(Object fieldValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-         
-    }
 }
