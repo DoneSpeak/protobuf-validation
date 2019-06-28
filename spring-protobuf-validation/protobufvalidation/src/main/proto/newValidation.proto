@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package cn.donespeak.exchange;
+
+import "protoValidationNew.proto";
+
+message NewData {
+	repeated string value = 1 [(validate.rules).collection.values.not_null = true];
+
+	map<string, int64> scores = 2 [(validate.rules).collection.keys.not_null = true];
+
+	repeated int32 numbers = 3 [(validate.rules).numbers_in = {in: [1, 2], not_in: [3, 4, 5]}];
+	repeated int32 strings = 4 [(validate.rules).sequences_in = {in: ["a", "b"]}];
+}

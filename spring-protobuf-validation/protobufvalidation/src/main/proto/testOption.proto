@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+
+package testoption;
+
+extend google.protobuf.FieldOptions {
+	optional Fields rules = 1000000;
+	optional InValues values = 2000000;
+}
+
+message Fields {
+	oneof rules {
+		InValues values = 1;
+	}
+}
+
+message InValues {
+	repeated int32 in = 1;
+	repeated int32 not_in = 2;
+}
+
+message TestValues {
+	repeated int32 vals = 1 [(testoption.rules).values = {in: [1,2,3]}];
+	repeated int32 vals2 = 2 [(testoption.values) = {in: [1,2,3]}];
+}

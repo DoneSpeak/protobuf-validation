@@ -1,0 +1,103 @@
+syntax = "proto2";
+
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+
+package validate;
+
+extend google.protobuf.FieldOptions {
+	optional FieldConstraint rules = 55555;
+}
+
+message FieldConstraint {
+	oneof constraint {
+	    // 为true时，不能为null，false 时必须为null
+	    bool not_null = 150001;
+	    // 检查 boolean 类型属性指定值是否匹配
+	    bool assert_bool = 150002;
+	    // 检查数值类型属性的值是否大于 min
+	    int64 min = 150003;
+	    // 检查数值类型属性的值是否小于 max
+	    int64 max = 150004;
+	    // 检查集合类大小
+	    SizeContraint size = 150005;
+	    // 检查数值 整数位和小数位 是否小于指定值
+	    DigitsConstraint digits = 150006;
+	    // 检查时间是否是当前时间之前，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+	    // 当值为ture时，表示过去（不包含现在），false表示现在或者未来
+	    bool past = 150007;
+	    // 检查时间是否是当前时间之后，如果为 int32 类型，则表示单位为 秒，int64 则表示单位为 毫秒。
+	    // 当值为ture时，表示未来（不包含现在），false表示现在或者过去
+	    bool future = 150008;
+	    // 校验字符串是否符合正则表达式
+	    string pattern = 150009;
+	    // 为true时，字符串不能为空，且trim之后长度大于 0
+	    bool not_blank = 150010;
+	    // 为true时，集合不能为空，且大小必须大于 0
+	    bool not_empty = 150011;
+	    // 为true时，表示必须为正数，false时，则为非正数
+	    bool positive = 150012;
+	    // 为true时，表示必须为负数，false时，则为非负数
+	    bool negative = 150013;
+	    // 取值范围应该在range中
+	    RangeConstraint range = 150014;
+	    // 字符串长度应该在length指定的范围内
+	    LengthConstraint length = 150015;
+	    // 必须是电子邮箱地址
+	    bool email = 150016;
+		// 校验 proto 类，为true时进行级联校验，false时不进行
+	    bool validate = 150017;
+
+		CollectionConstraint collection = 150018;
+
+	    SequancesInConstraint sequences_in = 150019;
+
+	    NumbersInConstraint numbers_in = 150020;
+	}
+}
+
+message DigitsConstraint {
+	// 小数点前的数的位数
+    optional int32 integer = 1;
+    // 小数点后的数的位数
+    optional int32 fraction = 2;
+}
+
+message SizeContraint {
+	// 缺省值为 0
+    optional int32 min = 1;
+    // 缺省值为 Integer.MAX_VALUE
+    optional int32 max = 2;
+}
+
+message RangeConstraint {
+	// 缺省值为
+    optional int64 min = 1;
+    // 缺省值为 Long.MAX_VALUE
+    optional int64 max = 2;
+}
+
+message LengthConstraint {
+	// 缺省值为 0
+    optional int32 min = 1;
+    // 缺省值为 Integer.MAX_VALUE
+    optional int32 max = 2;
+}
+
+message SequancesInConstraint {
+	repeated string in = 1;
+	repeated string not_in = 2;
+}
+
+message NumbersInConstraint {
+	repeated int32 in = 1;
+	repeated int64 not_in = 2;
+}
+
+message CollectionConstraint {
+	// 对key值进行约束，仅对map类型数据有效
+	optional FieldConstraint keys = 1;
+	// 对value值进行约束，对于map类型数据，则为value，对于repeated类型数据，则为数组中的元素
+	optional FieldConstraint values = 2;
+}

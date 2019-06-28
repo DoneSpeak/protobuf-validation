@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+
+package testoption;
+
+extend google.protobuf.MessageOptions {
+	string message_option = 50000;
+}
+
+message AllDataType {
+
+	option (testoption.message_option) = "1dfdf";
+
+	map<string, int32> mapV = 1;
+	repeated string list = 2;
+
+	int32 intV = 3;
+}
