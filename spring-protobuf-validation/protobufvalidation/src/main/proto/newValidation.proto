@@ -2,13 +2,26 @@ syntax = "proto3";
 
 package cn.donespeak.exchange;
 
-import "protoValidationNew.proto";
+import "protoValidation.proto";
+
+enum State {
+  S_INACTIVE = 0;
+  S_PENDING  = 1;
+  S_ACTIVE   = 2;
+}
+
+message Item {
+	string val = 1;
+}
 
 message NewData {
-	repeated string value = 1 [(validate.rules).collection.values.not_null = true];
+	repeated string value = 1 [(valid.rules).collection.values.not_null = true];
+	repeated Item items = 6 [(valid.rules).collection.values.not_null = true];
 
-	map<string, int64> scores = 2 [(validate.rules).collection.keys.not_null = true];
+	map<string, Item> scores = 2 [(valid.rules).collection.values.skip = true];
 
-	repeated int32 numbers = 3 [(validate.rules).numbers_in = {in: [1, 2], not_in: [3, 4, 5]}];
-	repeated int32 strings = 4 [(validate.rules).sequences_in = {in: ["a", "b"]}];
+	repeated int32 numbers = 3 [(valid.rules).numbers_in = {in: [1, 2], not_in: [3, 4, 5]}];
+	repeated int32 strings = 4 [(valid.rules).sequences_in = {in: ["a", "b"]}, (valid.is_null) = true];
+
+	State state = 5 [(valid.rules).numbers_in = {in: [1, 2]}];
 }

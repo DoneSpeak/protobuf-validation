@@ -16,40 +16,64 @@
 
 package cn.donespeak.protobufvalidation;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.google.protobuf.Descriptors;
 
-import cn.donespeak.protobufvalidation.constraintvalidators.*;
-import valid.ProtoValidation;
-
-import java.util.Map;
+import cn.donespeak.protobufvalidation.constraintvalidators.AssertBoolValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.DigitsValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.EmailValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.FutureValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.LengthValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.MaxValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.MinValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.NegativeValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.NotBlankValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.NotEmptyValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.NotNullValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.PastValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.PatternValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.PositiveValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.RangeValidator;
+import cn.donespeak.protobufvalidation.constraintvalidators.SizeValidator;
+import valid.FieldConstraint;
+import valid.FieldConstraint.ConstraintCase;
 
 /**
  * @author Serious
  */
 public class ValidatorRegistry {
-    private static final Map<Descriptors.FieldDescriptor, ContraintValidator> REGISTRY = Maps.newHashMap();
+    private static final Map<ConstraintCase, ContraintValidator> REGISTRY = Maps.newHashMap();
 
     static {
-        REGISTRY.put(ProtoValidation.notNull.getDescriptor(), new NotNullValidator());
-        REGISTRY.put(ProtoValidation.assertBool.getDescriptor(), new AssertBoolValidator());
-        REGISTRY.put(ProtoValidation.min.getDescriptor(), new MinValidator());
-        REGISTRY.put(ProtoValidation.max.getDescriptor(), new MaxValidator());
-        REGISTRY.put(ProtoValidation.size.getDescriptor(), new SizeValidator());
-        REGISTRY.put(ProtoValidation.digits.getDescriptor(), new DigitsValidator());
-        REGISTRY.put(ProtoValidation.past.getDescriptor(), new PastValidator());
-        REGISTRY.put(ProtoValidation.future.getDescriptor(), new FutureValidator());
-        REGISTRY.put(ProtoValidation.pattern.getDescriptor(), new PatternValidator());
-        REGISTRY.put(ProtoValidation.notBlank.getDescriptor(), new NotBlankValidator());
-        REGISTRY.put(ProtoValidation.notEmpty.getDescriptor(), new NotEmptyValidator());
-        REGISTRY.put(ProtoValidation.positive.getDescriptor(), new PositiveValidator());
-        REGISTRY.put(ProtoValidation.negative.getDescriptor(), new NegativeValidator());
-        REGISTRY.put(ProtoValidation.range.getDescriptor(), new RangeValidator());
-        REGISTRY.put(ProtoValidation.length.getDescriptor(), new LengthValidator());
-        REGISTRY.put(ProtoValidation.email.getDescriptor(), new EmailValidator());
+        REGISTRY.put(ConstraintCase.NOT_NULL, new NotNullValidator());
+        REGISTRY.put(ConstraintCase.ASSERT_BOOL, new AssertBoolValidator());
+        REGISTRY.put(ConstraintCase.MIN, new MinValidator());
+        REGISTRY.put(ConstraintCase.MAX, new MaxValidator());
+        REGISTRY.put(ConstraintCase.SIZE, new SizeValidator());
+        REGISTRY.put(ConstraintCase.DIGITS, new DigitsValidator());
+        REGISTRY.put(ConstraintCase.PAST, new PastValidator());
+        REGISTRY.put(ConstraintCase.FUTURE, new FutureValidator());
+        REGISTRY.put(ConstraintCase.PATTERN, new PatternValidator());
+        REGISTRY.put(ConstraintCase.NOT_BLANK, new NotBlankValidator());
+        REGISTRY.put(ConstraintCase.NOT_EMPTY, new NotEmptyValidator());
+        REGISTRY.put(ConstraintCase.POSITIVE, new PositiveValidator());
+        REGISTRY.put(ConstraintCase.NEGATIVE, new NegativeValidator());
+        REGISTRY.put(ConstraintCase.RANGE, new RangeValidator());
+        REGISTRY.put(ConstraintCase.LENGTH, new LengthValidator());
+        REGISTRY.put(ConstraintCase.EMAIL, new EmailValidator());
+//        REGISTRY.put(ConstraintCase.REQUIRED, new RequiredValidator());
+//        REGISTRY.put(ConstraintCase.COLLECTION, new CollectionValidator());
+//        REGISTRY.put(ConstraintCase.SEQUENCES_IN, new SequencesInValidator());
+//        REGISTRY.put(ConstraintCase.NUMBERS_IN, new NumbersINValidator());
     }
 
-    public static ContraintValidator getValidator(Descriptors.FieldDescriptor descriptor) {
-        return REGISTRY.get(descriptor);
+    public static ContraintValidator getValidator(ConstraintCase constraintCase) {
+        return REGISTRY.get(constraintCase);
+    }
+    
+    public static boolean isRegistered(ConstraintCase constraintCase) {
+        return REGISTRY.containsKey(constraintCase);
     }
 }
