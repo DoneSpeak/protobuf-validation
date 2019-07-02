@@ -43,7 +43,7 @@ public class GeneratedMessageV3Test {
        
         Map<String, Item> map = new HashMap<String, Item>();
         map.put("dfd", NewValidation.Item.newBuilder().setVal("df").build());
-        map.put("33", null);
+        map.put("33", NewValidation.Item.newBuilder().setVal("df2222").build());
         
         NewValidation.NewData newData = NewValidation.NewData.newBuilder().addAllNumbers(Arrays.asList(1, 4, 5))
                 .putAllScores(map).addAllItems(map.values()).setState(State.S_PENDING).build();

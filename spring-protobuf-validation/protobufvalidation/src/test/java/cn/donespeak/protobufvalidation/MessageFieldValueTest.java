@@ -47,7 +47,6 @@ public class MessageFieldValueTest {
 		System.out.println("addRoles-2: " + user.getRolesList());
 		
 		List<Integer> roles = user.getRolesList();
-		roles.add(5);
 		System.out.println("roles: " + roles);
 	}
 }

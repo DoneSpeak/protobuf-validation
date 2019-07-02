@@ -5,30 +5,30 @@ package cn.donespeak.exchange;
 import "protoValidation.proto";
 
 message UserRequest {
-	string name = 1 [(valid.rules).pattern = "[a-zA-Z]{5,20}"];
-	int32 age = 2 [(valid.rules).max = 100, (valid.rules).min = 18];
-	string email = 3 [(valid.rules).not_null = true, (valid.rules).email = true];
-	int32 score = 4 [(valid.rules).range = {min: 0, max: 100}];
-	repeated int32 roles = 5 [(valid.rules).not_empty = true];
-	int32 balance = 6 [(valid.rules).negative = false];
+	string name = 1 [(valid.r).field.pattern = "[a-zA-Z]{5,20}"];
+	int32 age = 2 [(valid.r).field.range = {max:100, min: 18}];
+	string email = 3 [(valid.r).field.email = true];
+	int32 score = 4 [(valid.r).field.range = {min: 0, max: 100}];
+	repeated int32 roles = 5 [(valid.r).field.not_empty = true];
+	int32 balance = 6 [(valid.r).field.negative = false];
 
 	ActiveStatusE active_statue = 7;
 
 	Address address = 8;
 
-	House house = 9 [(valid.rules).skip = true];
+	House house = 9 [(valid.r).field.required = true, (valid.r).field.not_empty = true];
 }
 
 message Address {
-	string city = 1 [(valid.rules).not_blank = true];
-	string state = 2 [(valid.rules).not_blank = true];
+	string city = 1 [(valid.r).field.not_blank = true];
+	string state = 2 [(valid.r).field.not_blank = true];
 
 	Address sub_address = 3;
 }
 
 message House {
-	string location = 1 [(valid.rules).not_blank = true];
-	Address address = 2 [(valid.rules).skip = false];
+	string location = 1 [(valid.r).field.not_blank = true];
+	Address address = 2 [(valid.r).field.required = true, (valid.r).skip = true];
 }
 
 enum ActiveStatusE {

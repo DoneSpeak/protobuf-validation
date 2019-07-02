@@ -7,14 +7,20 @@ import "google/protobuf/descriptor.proto";
 package valid;
 
 extend google.protobuf.FieldOptions {
-	optional FieldConstraint rules = 55555;
-	optional bool is_null = 3443434;
+	optional FieldConstraintRules r = 555555;
+}
+
+message FieldConstraintRules {
+	// 普通数据类型，其中enum将被归入int32
+	optional FieldConstraint field = 55555;
+	// repeated 和 maps
+	optional CollectionConstraint collection = 150018;
+	// 校验 message 类，为true时不进行级联校验，false时校验。默认需要校验
+    optional bool skip = 150017;
 }
 
 message FieldConstraint {
 	oneof constraint {
-	    // 为true时，不能为null，false 时必须为null
-	    bool not_null = 150001;
 	    // 检查 boolean 类型属性指定值是否匹配
 	    bool assert_bool = 150002;
 	    // 检查数值类型属性的值是否大于 min
@@ -47,16 +53,12 @@ message FieldConstraint {
 	    LengthConstraint length = 150015;
 	    // 必须是电子邮箱地址
 	    bool email = 150016;
-		// 校验 proto 类，为true时不进行级联校验，false时校验。默认需要校验
-	    bool skip = 150017;
-		// 校验 proto 类，为true时不进行级联校验，false时校验。默认需要校验
-	    bool required = 150021;
+		// 校验 message 类，为true时表示必须提供，false时可不提供
+    	bool required = 150021;
 
-		CollectionConstraint collection = 150018;
+	    SequanceInConstraint sequence_in = 150019;
 
-	    SequancesInConstraint sequences_in = 150019;
-
-	    NumbersInConstraint numbers_in = 150020;
+	    NumberInConstraint number_in = 150020;
 	}
 }
 
@@ -88,19 +90,19 @@ message LengthConstraint {
     optional int32 max = 2;
 }
 
-message SequancesInConstraint {
+message SequanceInConstraint {
 	repeated string in = 1;
 	repeated string not_in = 2;
 }
 
-message NumbersInConstraint {
+message NumberInConstraint {
 	repeated int32 in = 1;
 	repeated int64 not_in = 2;
 }
 
 message CollectionConstraint {
 	// 对key值进行约束，仅对map类型数据有效
-	optional FieldConstraint keys = 1;
+	optional FieldConstraintRules k = 1;
 	// 对value值进行约束，对于map类型数据，则为value，对于repeated类型数据，则为数组中的元素
-	optional FieldConstraint values = 2;
+	optional FieldConstraintRules v = 2;
 }

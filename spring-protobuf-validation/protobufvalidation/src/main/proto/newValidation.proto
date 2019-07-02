@@ -15,13 +15,23 @@ message Item {
 }
 
 message NewData {
-	repeated string value = 1 [(valid.rules).collection.values.not_null = true];
-	repeated Item items = 6 [(valid.rules).collection.values.not_null = true];
+	repeated string value = 1 [(valid.r).field.not_empty = true];
+	repeated Item items = 6
+		[
+			(valid.r).field.size = {min: 10},
+			(valid.r).collection.v.skip = true
+		];
 
-	map<string, Item> scores = 2 [(valid.rules).collection.values.skip = true];
+	map<string, Item> scores = 2
+		[
+			(valid.r).field.size = {min: 2, max: 100},
+			(valid.r).collection.k.field.not_blank = true,
+			(valid.r).collection.v.field.required = true,
+			(valid.r).collection.v.skip = true
+		];
 
-	repeated int32 numbers = 3 [(valid.rules).numbers_in = {in: [1, 2], not_in: [3, 4, 5]}];
-	repeated int32 strings = 4 [(valid.rules).sequences_in = {in: ["a", "b"]}, (valid.is_null) = true];
+	repeated int32 numbers = 3 [(valid.r).field.number_in = {in: [1, 2], not_in: [3, 4, 5]}];
+	repeated int32 strings = 4 [(valid.r).field.sequence_in = {in: ["a", "b"]}];
 
-	State state = 5 [(valid.rules).numbers_in = {in: [1, 2]}];
+	State state = 5 [(valid.r).field.number_in = {in: [1, 2]}];
 }
