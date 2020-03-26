@@ -47,7 +47,7 @@ public class ValidatorRegistry {
     private static final Map<ConstraintCase, ContraintValidator> REGISTRY = Maps.newHashMap();
 
     static {
-        REGISTRY.put(ConstraintCase.NOT_NULL, new NotNullValidator());
+//        REGISTRY.put(ConstraintCase.NOT_NULL, new NotNullValidator());
         REGISTRY.put(ConstraintCase.ASSERT_BOOL, new AssertBoolValidator());
         REGISTRY.put(ConstraintCase.MIN, new MinValidator());
         REGISTRY.put(ConstraintCase.MAX, new MaxValidator());

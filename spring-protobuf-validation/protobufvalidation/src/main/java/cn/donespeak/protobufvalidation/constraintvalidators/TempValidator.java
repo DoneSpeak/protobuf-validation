@@ -22,7 +22,7 @@ public class TempValidator {
     }
     
     public boolean isValid(GeneratedMessageV3 messageV3, Descriptors.FieldDescriptor fieldDescriptor, CollectionConstraint constraintValue ) {
-        if(!constraintValue.hasKeys() && !constraintValue.hasValues()) {
+        if(!constraintValue.hasK() && !constraintValue.hasV()) {
             return true;
         }
         int repeatedCount = messageV3.getRepeatedFieldCount(fieldDescriptor);
@@ -30,11 +30,11 @@ public class TempValidator {
         for(int i = 0; i < repeatedCount; i ++) {
             MapEntry<?, ?> mapValue = (MapEntry<?, ?>)messageV3.getRepeatedField(fieldDescriptor, i);
             String fieldName = fieldDescriptor.getFullName() + "[" + mapValue.getKey().toString() + "]";
-            if(constraintValue.hasKeys()) {
-                validate(constraintValue.getKeys(), fieldName + ".key", mapValue.getKey());
+            if(constraintValue.hasK()) {
+//                validate(constraintValue.hasK(), fieldName + ".key", mapValue.getKey());
             }
-            if(constraintValue.hasValues()) {
-                validate(constraintValue.getValues(), fieldName + ".val", mapValue.getValue());
+            if(constraintValue.hasV()) {
+//                validate(constraintValue.hasV(), fieldName + ".val", mapValue.getValue());
             }
         }
         return false;
@@ -47,7 +47,8 @@ public class TempValidator {
             // 对于不存在的validator的option，直接跳过
             return true;
         }
-        validator.validate(fieldClass, fieldName, fieldValue, pair.getConstraintValue());
+//        validator.validate(fieldClass, fieldName, fieldValue, pair.getConstraintValue());
+        return false;
     }
 
 }

@@ -87,17 +87,17 @@ public class ProtoValidatorImpl implements ProtoValidator {
             }
             Object fieldValue = messageV3.getField(fieldDescriptor);
             
-            try {
-                validator.validate(messageV3, fieldValue, pair.getConstraintValue());
-            } catch (IllegalArgumentException e) {
-                ProtoConstraintViolation constraintViolation = new ProtoConstraintViolation();
-                constraintViolation.setInvalidValue(fieldValue);
-                constraintViolation.setPropertyName(fieldName);
-                constraintViolation.setPropertyPath(appendPropertyPath(propertyPath, fieldName));
-                constraintViolation.setMessage(optionDescriptor.toString());
-                
-                resultValidations.add(constraintViolation);                
-            }
+//            try {
+//                validator.validate(messageV3, fieldValue, pair.getConstraintValue());
+//            } catch (IllegalArgumentException e) {
+//                ProtoConstraintViolation constraintViolation = new ProtoConstraintViolation();
+//                constraintViolation.setInvalidValue(fieldValue);
+//                constraintViolation.setPropertyName(fieldName);
+//                constraintViolation.setPropertyPath(appendPropertyPath(propertyPath, fieldName));
+//                constraintViolation.setMessage(optionDescriptor.toString());
+//                
+//                resultValidations.add(constraintViolation);                
+//            }
         }
         return resultValidations;
     }
