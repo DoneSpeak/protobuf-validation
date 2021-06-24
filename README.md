@@ -1,8 +1,6 @@
-Protobuf Validation
-====
+# Protobuf Validation
 
-可选的protobuf validation
----
+## 可选的protobuf validation
 
 ```protobuf
 syntax = "proto2";
@@ -124,3 +122,6 @@ enum ActiveStatusE {
 	INACTIVE = -1;
 }
 ```
+
+## 开发说明
+

@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-//import "valid/protoValidation.proto";
-
-message UserCard {
-	string name = 1;
-	string emai = 2;
-}
